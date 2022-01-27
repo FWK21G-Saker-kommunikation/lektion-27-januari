@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcryptFunctions = require('./bcrypt');
 const { admin, user } = require('./middleware/auth');
 const { getAccountByUsername, getAccountByEmail, createAccount,
-    updateCookieOnAccount, getAccountByCookie, getAccountsByRole, 
-    removeAccount, changePassword } = require('./database/operations');
+     getAccountsByRole, removeAccount, changePassword } = require('./database/operations');
 
 app.use(express.static('../frontend'));
 app.use(express.json());

@@ -13,11 +13,6 @@ async function getAccountByEmail(email) {
     return account;
 }
 
-async function getAccountByCookie(cookie) {
-    const account = await database.find({ cookie: parseInt(cookie) });
-    return account;
-}
-
 async function getAccountsByRole(user) {
     const userAccounts = await database.find({ role: 'user' });
     return userAccounts;
@@ -25,10 +20,6 @@ async function getAccountsByRole(user) {
 
 function createAccount(account) {
     database.insert(account);
-}
-
-function updateCookieOnAccount(username, cookieId) {
-    database.update({ username: username }, { $set: { cookie: cookieId }});
 }
 
 function removeAccount(username) {
@@ -40,5 +31,5 @@ async function changePassword(username, newPassword) {
     database.update({ username: username }, { $set: { password: hashedPassword }});
 }
 
-module.exports = { getAccountByUsername, getAccountByEmail, createAccount, updateCookieOnAccount,
-    getAccountByCookie, getAccountsByRole, removeAccount, changePassword }
+module.exports = { getAccountByUsername, getAccountByEmail, createAccount,
+     getAccountsByRole, removeAccount, changePassword }

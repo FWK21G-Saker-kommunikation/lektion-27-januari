@@ -13,3 +13,5 @@ JWT vs cookies: https://hackernoon.com/using-session-cookies-vs-jwt-for-authenti
 ## Videor
 
 ## Inspelningar
+
+https://drive.google.com/drive/folders/1ELk5jrBv6KZYtFY8L3qpGm0DwUVRhcBU?usp=sharing

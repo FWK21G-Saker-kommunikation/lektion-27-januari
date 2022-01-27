@@ -1,4 +1,4 @@
-const { getAccountByCookie, getAccountByUsername } = require('../database/operations');
+const { getAccountByUsername } = require('../database/operations');
 const jwt = require('jsonwebtoken');
 
 async function admin(request, response, next) {
