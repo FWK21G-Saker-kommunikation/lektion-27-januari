@@ -36,6 +36,7 @@ async function logout() {
     console.log(data);
 
     if (data.success) {
+        sessionStorage.clear();
         window.location.href = 'http://localhost:5000/';
     }
 }
@@ -61,7 +62,12 @@ async function getAccountInformation() {
 }
 
 async function removeAccount() {
-    const response = await fetch('http://localhost:5000/api/remove');
+    const token = sessionStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/api/remove', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
     const data = await response.json();
 
     console.log(data);
@@ -71,13 +77,19 @@ async function removeAccount() {
 }
 
 async function getUserAccounts() {
-    const response = await fetch('http://localhost:5000/api/user-accounts');
+    const token = sessionStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/api/user-accounts', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
     const data = await response.json();
 
     console.log(data);
 }
 
 async function changePassword(newPassword) {
+    const token = sessionStorage.getItem('token');
     const body = {
         password: newPassword
     }
@@ -86,7 +98,8 @@ async function changePassword(newPassword) {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         }
     });
     const data = await response.json();

@@ -74,7 +74,7 @@ app.post('/api/login', async (request, response) => {
 
             // Vår token blir krypterad med användarens användarnamn som kopplar vår token till användaren
             const token = jwt.sign({ username: account[0].username }, 'a1b1c1', {
-                expiresIn: 20 //Går ut om 10 minuter (värdet är i sekunder)
+                expiresIn: 600 //Går ut om 10 minuter (värdet är i sekunder)
             });
             
             resObj.token = token;
@@ -145,33 +145,44 @@ app.get('/api/account', async (request, response) => {
 });
 
 app.get('/api/remove', user, (request, response) => {
-    const cookie = request.cookies.loggedIn;
-
     console.log('----/API/REMOVE-----');
+    const token = request.headers.authorization.replace('Bearer ', '');
 
     const resObj = {
         success: true
     }
 
-    removeAccount(cookie);
+    try {
+        const data = jwt.verify(token, 'a1b1c1');
 
-    response.clearCookie('loggedIn');
+        removeAccount(data.username);
+    } catch (error) {
+        resObj.success = false;
+        resObj.errorMessage = 'Token expired';
+    }
+
     response.json(resObj);
 });
 
 app.get('/api/user-accounts', admin, async (request, response) => {
+    console.log('----/API/USER-ACCOUNTS-----');
+    const token = request.headers.authorization.replace('Bearer ', '');
+
     const resObj = {
         success: false,
         accounts: ''
     }
+    try {
+        const data = jwt.verify(token, 'a1b1c1');
 
-    console.log('----/API/USER-ACCOUNTS-----');
+        const userAccounts = await getAccountsByRole('user');
 
-    const userAccounts = await getAccountsByRole('user');
-
-    if (userAccounts.length > 0) {
-        resObj.success = true;
-        resObj.accounts = userAccounts;
+        if (userAccounts.length > 0) {
+            resObj.success = true;
+            resObj.accounts = userAccounts;
+        }   
+    } catch (error) {
+        resObj.errorMessage = 'Token expired';
     }
 
     response.json(resObj);
@@ -180,13 +191,20 @@ app.get('/api/user-accounts', admin, async (request, response) => {
 app.post('/api/change-password', admin, async (request, response) => {
     const newPassword = request.body;
     // { password: 'hej123' }
-    const cookie = request.cookies.loggedIn;
+    const token = request.headers.authorization.replace('Bearer ', '');
 
     const resObj = {
         success: true
     }
 
-    changePassword(cookie, newPassword);    
+    try {
+        const data = jwt.verify(token, 'a1b1c1');
+
+        changePassword(data.username, newPassword);      
+    } catch (error) {
+        resObj.success = false;
+        resObj.errorMessage = 'Token expired';
+    } 
     
     response.json(resObj);
 });

@@ -31,13 +31,13 @@ function updateCookieOnAccount(username, cookieId) {
     database.update({ username: username }, { $set: { cookie: cookieId }});
 }
 
-function removeAccount(cookie) {
-    database.remove({ cookie: parseInt(cookie)} );
+function removeAccount(username) {
+    database.remove({ username: username } );
 }
 
-async function changePassword(cookie, newPassword) {
+async function changePassword(username, newPassword) {
     const hashedPassword = await bcryptFunctions.hashPassword(newPassword.password);
-    database.update({ cookie: parseInt(cookie) }, { $set: { password: hashedPassword }});
+    database.update({ username: username }, { $set: { password: hashedPassword }});
 }
 
 module.exports = { getAccountByUsername, getAccountByEmail, createAccount, updateCookieOnAccount,

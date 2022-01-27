@@ -1,13 +1,15 @@
-const { getAccountByCookie } = require('../database/operations');
+const { getAccountByCookie, getAccountByUsername } = require('../database/operations');
+const jwt = require('jsonwebtoken');
 
 async function admin(request, response, next) {
-    const cookie = request.cookies.loggedIn;
+    const token = request.headers.authorization.replace('Bearer ', '');
 
     console.log('I ADMIN MIDDLEWARE');
 
     try {
-        const account = await getAccountByCookie(cookie);
-        
+        const data = jwt.verify(token, 'a1b1c1');
+        const account = await getAccountByUsername(data.username);
+        console.log(account);
         //Ifall vi inte hittar något användarkonto
         if (account.length == 0) {
             throw new Error(); //Kommer istället att hoppa till catch
@@ -29,12 +31,13 @@ async function admin(request, response, next) {
 }
 
 async function user(request, response, next) {
-    const cookie = request.cookies.loggedIn;
+    const token = request.headers.authorization.replace('Bearer ', '');
 
     console.log('I USER MIDDLEWARE');
 
     try {
-        const account = await getAccountByCookie(cookie);
+        const data = jwt.verify(token, 'a1b1c1');
+        const account = await getAccountByUsername(data.username);
         
         //Ifall vi inte hittar något användarkonto
         if (account.length == 0) {
