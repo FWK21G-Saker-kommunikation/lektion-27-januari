@@ -1,0 +1,9 @@
+JSON Web Tokens (JWT)
+
+1. När vi loggar in så verifiera inloggningsuppgifter (korrekt användarnamn och lösenord).
+2. Om korrekta inloggningsuppgifter signera en JWT med användarnamnet och skicka tillbaka till frontend.
+3. I frontend ta emot token och spara i sessionStorage.
+4. Vid varje fetch-anrop så hämta token från sessionStorage och skicka med i fetch-anropet.
+5. På servern verifera att token är korrekt.
+6. Om token är korrekt så returnera begärd data till frontend.
+7. Annars om token inte är korrekt så skicka tillbaka ett felmeddelande till frontend.
